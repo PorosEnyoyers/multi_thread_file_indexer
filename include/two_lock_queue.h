@@ -16,8 +16,8 @@ namespace custom
         std::unique_ptr<node> m_next;
 
         node() : m_value {std::nullopt}, m_next{nullptr}{}
-        node& operator=(const T& a) = delete;
-        node& operator=(T&& a) = delete;
+        node& operator=(const node<T>& a) = delete;
+        node& operator=(node<T>&& a) = delete;
         ~node() = default;
         void initialized_value(T value)
         {
@@ -41,15 +41,7 @@ namespace custom
         using size_type = std::size_t;
         using node = node<value_type>;
         using queue = two_lock_queue<T>;
-        void push(T value)
-        {
-            std::unique_ptr<node> new_node = std::make_unique<node>();
-            std::lock_guard<std::mutex> lk{m_tail_lk};
-            m_tail_ptr->initialized_value(std::move(value));
-            m_tail_ptr->set_next(std::move(new_node));
-            m_tail_ptr = m_tail_ptr->m_next.get();
-            ++m_size;
-        }
+
         two_lock_queue()
         {
             m_head_ptr = std::make_unique<node>();
@@ -62,12 +54,46 @@ namespace custom
         two_lock_queue& operator=(queue&& other) = delete;
         ~two_lock_queue() = default;
 
+        void push(T value) &
+        {
+            std::unique_ptr<node> new_node = std::make_unique<node>();
+            std::lock_guard<std::mutex> lk{m_tail_lk};
+            m_tail_ptr->initialized_value(std::move(value));
+            m_tail_ptr->set_next(std::move(new_node));
+            m_tail_ptr = m_tail_ptr->m_next.get();
+            ++m_size;
+            m_cv.notify_one();
+        }
+        bool try_pop(value_type& pipe_out) &
+        {
+            std::lock_guard<std::mutex> lk{m_head_lk};
+             if(m_size.load() == 0)
+            {
+                 return false;
+            }
+            pipe_out = std::move(m_head_ptr->m_value.value());
+            m_head_ptr = std::move(m_head_ptr->m_next);
+            --m_size;
+            return true;
+        }
+        void wait_pop(value_type& pipe_out) &
+        {
+            std::unique_lock<std::mutex> lk{m_head_lk};
+            m_cv.wait(lk, [this](){return this->m_size.load() != 0;});
+            pipe_out = std::move(m_head_ptr->m_value.value());
+            m_head_ptr = std::move(m_head_ptr->m_next);
+            --m_size;
+        }
+        size_type size() const
+        {
+            return m_size.load();
+        }
     private:
         std::mutex m_head_lk;
         std::mutex m_tail_lk;
         std::condition_variable m_cv;
         std::unique_ptr<node> m_head_ptr;
         node* m_tail_ptr;
-        size_type m_size;
+        std::atomic<size_type> m_size;
     };
 }
