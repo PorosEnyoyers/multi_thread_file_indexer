@@ -19,21 +19,21 @@ namespace custom
     public:
         //Default constructor
         thread_guard() noexcept = default;
-        //Constructor that take function to create a thead_guard
+        //Constructor that takes a function to create a thread_guard
         template<typename Func, typename... Args>
         requires Function<Func, Args...>
         explicit thread_guard(Func&& func, Args&&... args)
         : m_t{std::forward<Func>(func),std::forward<Args>(args)...}
         {
         }
-        //Constructor that take member function poiner, object pointer to create a thread_guard
+        //Constructor that takes a member function pointer and object pointer to create a thread_guard
         template<typename Func_ptr, typename Obj_ptr, typename... Args>
         requires Object_Func<Func_ptr, Obj_ptr, Args...>
         explicit thread_guard(Func_ptr func, Obj_ptr obj, Args&&... args)
         : m_t{func, obj, std::forward<Args>(args)...}
         {
         }
-        //Constructor that take a thread and take ownsership of it
+        //Constructor that takes a thread and takes ownership of it
         explicit thread_guard(std::thread&& thread) noexcept
         : m_t{std::move(thread)}
         {
@@ -47,6 +47,8 @@ namespace custom
         {}
         thread_guard& operator=(thread_guard&& other)
         {
+            if(this == &other)
+                return *this;
             if(this->joinable())
                 m_t.join();
             m_t = std::move(other.m_t);
