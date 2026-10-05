@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/multi_thread_file_indexer.dir/src/main.cpp.o -o multi_thread_file_indexer 

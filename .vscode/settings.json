@@ -1,0 +1,8 @@
+{
+    "cmake.sourceDirectory": "/wsl.localhost/Ubuntu/home/khoip/projects/multi_thread_file_indexer",
+     "clangd.arguments": [
+       "--compile-commands-dir=${workspaceFolder}/build",
+       "--query-driver=/usr/bin/c++",
+       "--log=verbose"
+     ]
+}
