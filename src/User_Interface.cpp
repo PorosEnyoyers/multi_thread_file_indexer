@@ -26,7 +26,8 @@ namespace UI
     {
         while(true)
         {
-            std::cout << "Use command arguments to get the file record.\nExample: -size 10\n-path /usr/project.txt\n-size -range 50 100\nEnter your command to get files data: ";
+            std::cout << "All implemented command: \n" <<" -size [Argument in Bytes] Example: -size 500\n -size -range [Lower Bound in Bytes] [Upper Bound in Bytes] Example: -size -range 500 1000 \n -path [Absolute Path relative to given directory] Example: /usr is given; -path /usr/lib\n -mod_time [today, this_week, this_month, this_year] Example: -mod_time today\n";
+            std::cout << "\n\n\nEnter your command to find files: ";
             std::string input;
             std::getline(std::cin ,input);
             if(input == "-9999") return;
