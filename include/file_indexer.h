@@ -53,6 +53,65 @@ namespace custom
                 std::cout << "Files Indexed: " << num_file_processed << "\n";
                 std::cout << log_storage;
         }
+        std::vector<File_Record*> find_path(const std::string& key)
+        {
+            auto result = path_storage.storage[key].get();
+            if (result)
+            {
+                return std::vector<File_Record*>{result};
+            }
+            else 
+            {
+                return {};
+            }
+
+        }
+        std::vector<File_Record*> find_size(const std::size_t& key)
+        {
+            auto result = size_storage.tree.find(custom::File_Record_Size{key, {}});
+            if(!result.is_sentinel())
+            {
+                return result.get_node_ptr()->n_data.files;
+            }
+            return {};
+        }
+        std::vector<File_Record*> find_size(const std::size_t& lower, const std::size_t& upper)
+        {
+            
+        }
+        std::vector<File_Record*> find_mod_time(const std::string& key)
+        {
+            std::chrono::system_clock::time_point upper = std::chrono::system_clock::now();
+            std::chrono::system_clock::time_point lower {};
+            if(key == "today")
+            {
+                lower = upper - std::chrono::hours(24);
+            }
+            else if(key == "this_week")
+            {
+                lower = upper - std::chrono::days(7);
+            }
+            else if(key == "this_month")
+            {
+                lower = upper -std::chrono::days(30);
+            }
+            else if(key == "this_year")
+            {
+                lower = upper - std::chrono::days(365);
+            }
+            else 
+            {
+                return {};
+            }
+            auto iter = this->mod_storage.tree.find_range({lower, {}}, {upper,{}});
+            std::vector<File_Record*> res{};
+            for(auto& i:iter)
+            {
+                std::vector<File_Record*>& temp = i.get_node_ptr()->n_data.files;
+                res.insert(res.end(), temp.begin(), temp.end());
+            }
+            return res;
+        }
         private:
         // void loading()
         // {
