@@ -13,6 +13,7 @@ find_package(Threads REQUIRED)
 
 add_executable(multi_thread_file_indexer
     src/main.cpp
+    src/User_Interface.cpp
 )
 
 target_include_directories(multi_thread_file_indexer PRIVATE

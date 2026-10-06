@@ -24,8 +24,28 @@ namespace custom
             log_storage.logs.reserve(100);
         }
         ~file_indexer() = default;
-        void start(std::string path)
+        int start(std::string path)
         {
+            struct stat file_data;
+            if(lstat(path.c_str(), &file_data) == - 1)
+            {
+                std::cout << "Can't open starting Path!!! Terminating program!!!";
+                return -1;
+            }
+            custom::File_Record record{};
+            record.path = path;
+            record.is_dir = S_ISDIR(file_data.st_mode);
+            record.size = static_cast<std::size_t>(file_data.st_size);
+            record.mod_time = std::chrono::system_clock::time_point{std::chrono::seconds{file_data.st_mtim.tv_sec}};
+            std::unique_ptr<File_Record> temp = std::make_unique<File_Record>(std::move(record));
+            File_Record* temp_ptr = temp.get();
+            path_storage.storage[temp->path] = std::move(temp);
+            File_Record_Size size_file {temp_ptr->size, {}};
+            size_file.files.push_back(temp_ptr);
+            size_storage.tree.insert(size_file);
+            File_Record_Mod_Time mod_file{temp_ptr->mod_time, {}};
+            mod_file.files.push_back(temp_ptr);
+            mod_storage.tree.insert(mod_file);
             ++outstanding_work;
             try
             {
@@ -36,6 +56,7 @@ namespace custom
                 --outstanding_work;
                 throw std::logic_error("Can't submit directory to scan files!!! 0 file scanned");
             }
+            return 0;
         }
         void loading()
         {
@@ -77,7 +98,18 @@ namespace custom
         }
         std::vector<File_Record*> find_size(const std::size_t& lower, const std::size_t& upper)
         {
-            
+            std::vector<File_Record*> res{};
+            if(lower > upper || (upper - lower) >= (1024 * 1024) || (lower == 0 && upper == 0))
+            {
+                return res;
+            }
+            auto iters = size_storage.tree.find_range({lower,{}}, {upper,{}});
+            for(auto& i:iters)
+            {
+                std::vector<File_Record*>& temp = i.get_node_ptr()->n_data.files;
+                res.insert(res.end(), temp.begin(), temp.end());
+            }
+            return res;
         }
         std::vector<File_Record*> find_mod_time(const std::string& key)
         {

@@ -1,6 +1,7 @@
-CMakeFiles/multi_thread_file_indexer.dir/src/main.cpp.o: \
- /home/khoip/projects/multi_thread_file_indexer/src/main.cpp \
+CMakeFiles/multi_thread_file_indexer.dir/src/User_Interface.cpp.o: \
+ /home/khoip/projects/multi_thread_file_indexer/src/User_Interface.cpp \
  /usr/include/stdc-predef.h \
+ /home/khoip/projects/multi_thread_file_indexer/src/../include/User_Interface.h \
  /home/khoip/projects/multi_thread_file_indexer/src/../include/file_indexer.h \
  /home/khoip/projects/multi_thread_file_indexer/src/../include/./components.h \
  /usr/include/c++/11/atomic /usr/include/c++/11/bits/atomic_base.h \
@@ -248,7 +249,5 @@ CMakeFiles/multi_thread_file_indexer.dir/src/main.cpp.o: \
  /home/khoip/projects/multi_thread_file_indexer/src/../include/././thread_guard.h \
  /usr/include/c++/11/thread \
  /home/khoip/projects/multi_thread_file_indexer/src/../include/././two_lock_queue.h \
- /usr/include/c++/11/optional \
- /home/khoip/projects/multi_thread_file_indexer/src/../include/User_Interface.h \
- /usr/include/c++/11/charconv /usr/include/c++/11/sstream \
- /usr/include/c++/11/bits/sstream.tcc
+ /usr/include/c++/11/optional /usr/include/c++/11/charconv \
+ /usr/include/c++/11/sstream /usr/include/c++/11/bits/sstream.tcc

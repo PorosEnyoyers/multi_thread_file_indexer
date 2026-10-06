@@ -129,6 +129,30 @@ multi_thread_file_indexer/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/multi_thread_file_indexer.dir/build.make CMakeFiles/multi_thread_file_indexer.dir/build
 .PHONY : multi_thread_file_indexer/fast
 
+src/User_Interface.o: src/User_Interface.cpp.o
+.PHONY : src/User_Interface.o
+
+# target to build an object file
+src/User_Interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/multi_thread_file_indexer.dir/build.make CMakeFiles/multi_thread_file_indexer.dir/src/User_Interface.cpp.o
+.PHONY : src/User_Interface.cpp.o
+
+src/User_Interface.i: src/User_Interface.cpp.i
+.PHONY : src/User_Interface.i
+
+# target to preprocess a source file
+src/User_Interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/multi_thread_file_indexer.dir/build.make CMakeFiles/multi_thread_file_indexer.dir/src/User_Interface.cpp.i
+.PHONY : src/User_Interface.cpp.i
+
+src/User_Interface.s: src/User_Interface.cpp.s
+.PHONY : src/User_Interface.s
+
+# target to generate assembly for a file
+src/User_Interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/multi_thread_file_indexer.dir/build.make CMakeFiles/multi_thread_file_indexer.dir/src/User_Interface.cpp.s
+.PHONY : src/User_Interface.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -162,6 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... multi_thread_file_indexer"
+	@echo "... src/User_Interface.o"
+	@echo "... src/User_Interface.i"
+	@echo "... src/User_Interface.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
