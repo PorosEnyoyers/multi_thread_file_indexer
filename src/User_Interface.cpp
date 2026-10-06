@@ -45,7 +45,8 @@ namespace UI
             else {
                 for(auto i : result)
                 {
-                    std::cout << i->path << (i->is_dir? " is a directory" : " is a file")<< ". Size: " << i->size << ". Last Mod: " << std::chrono::system_clock::to_time_t(i->mod_time) << "\n";
+                    std::time_t time = std::chrono::system_clock::to_time_t(i->mod_time);
+                    std::cout << i->path << (i->is_dir? " is a directory" : " is a file")<< ". Size: " << i->size << ". Last Mod: " << std::ctime(&time) << "\n";
                 }
             }
         }

@@ -3,7 +3,10 @@
 int main()
 {
     custom::file_indexer indexer{};
-    if(indexer.start("/usr") == -1)
+    std::string starting_dir;
+    std::cout <<"Enter the directory to index: ";
+    std::getline(std::cin, starting_dir);
+    if(indexer.start(starting_dir) == -1)
     {
         return 0;
     }

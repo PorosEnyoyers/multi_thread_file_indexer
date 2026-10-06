@@ -35,6 +35,11 @@ namespace custom
             custom::File_Record record{};
             record.path = path;
             record.is_dir = S_ISDIR(file_data.st_mode);
+            if(!record.is_dir)
+            {
+                std::cout << "Summit path is not a directory!!! Terminating program!!!";
+                return -1;
+            }
             record.size = static_cast<std::size_t>(file_data.st_size);
             record.mod_time = std::chrono::system_clock::time_point{std::chrono::seconds{file_data.st_mtim.tv_sec}};
             std::unique_ptr<File_Record> temp = std::make_unique<File_Record>(std::move(record));
@@ -46,6 +51,7 @@ namespace custom
             File_Record_Mod_Time mod_file{temp_ptr->mod_time, {}};
             mod_file.files.push_back(temp_ptr);
             mod_storage.tree.insert(mod_file);
+            ++num_file_processed;
             ++outstanding_work;
             try
             {
