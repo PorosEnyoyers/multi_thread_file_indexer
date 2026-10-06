@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/khoip/projects/multi_thread_file_indexer/include
+CXX_INCLUDES = -I/home/khoip/projects/multi_thread_file_indexer/include -I/home/khoip/projects/multi_thread_file_indexer/third_party/Custom_Container_Library/include
 
 CXX_FLAGS = -g -Wall -Wextra -std=gnu++20
 

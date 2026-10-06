@@ -18,6 +18,7 @@ add_executable(multi_thread_file_indexer
 
 target_include_directories(multi_thread_file_indexer PRIVATE
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/third_party/Custom_Container_Library/include
 )
 
 target_link_libraries(multi_thread_file_indexer PRIVATE

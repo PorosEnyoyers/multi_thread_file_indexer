@@ -16,7 +16,7 @@
 #include <system_error>
 #include <ostream>
 #include <vector>
-#include "/home/khoip/projects/Custom_Container_Library/include/Red_Black_Tree.h"
+#include "../third_party/Custom_Container_Library/include/Red_Black_Tree.h"
 
 namespace custom
 {

@@ -1,12 +1,12 @@
 [
 {
   "directory": "/home/khoip/projects/multi_thread_file_indexer/build",
-  "command": "/usr/bin/c++  -I/home/khoip/projects/multi_thread_file_indexer/include -g -Wall -Wextra -std=gnu++20 -o CMakeFiles/multi_thread_file_indexer.dir/src/main.cpp.o -c /home/khoip/projects/multi_thread_file_indexer/src/main.cpp",
+  "command": "/usr/bin/c++  -I/home/khoip/projects/multi_thread_file_indexer/include -I/home/khoip/projects/multi_thread_file_indexer/third_party/Custom_Container_Library/include -g -Wall -Wextra -std=gnu++20 -o CMakeFiles/multi_thread_file_indexer.dir/src/main.cpp.o -c /home/khoip/projects/multi_thread_file_indexer/src/main.cpp",
   "file": "/home/khoip/projects/multi_thread_file_indexer/src/main.cpp"
 },
 {
   "directory": "/home/khoip/projects/multi_thread_file_indexer/build",
-  "command": "/usr/bin/c++  -I/home/khoip/projects/multi_thread_file_indexer/include -g -Wall -Wextra -std=gnu++20 -o CMakeFiles/multi_thread_file_indexer.dir/src/User_Interface.cpp.o -c /home/khoip/projects/multi_thread_file_indexer/src/User_Interface.cpp",
+  "command": "/usr/bin/c++  -I/home/khoip/projects/multi_thread_file_indexer/include -I/home/khoip/projects/multi_thread_file_indexer/third_party/Custom_Container_Library/include -g -Wall -Wextra -std=gnu++20 -o CMakeFiles/multi_thread_file_indexer.dir/src/User_Interface.cpp.o -c /home/khoip/projects/multi_thread_file_indexer/src/User_Interface.cpp",
   "file": "/home/khoip/projects/multi_thread_file_indexer/src/User_Interface.cpp"
 }
 ]
