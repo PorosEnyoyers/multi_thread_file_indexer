@@ -1,0 +1,16 @@
+# Build output (CMake)
+build/
+
+# clangd index cache
+.cache/
+
+# Editor workspace files
+*.code-workspace
+.vscode/
+
+# Compiled objects and binaries
+*.o
+*.obj
+*.a
+*.so
+*.out
