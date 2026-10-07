@@ -55,7 +55,14 @@ namespace custom
             ++outstanding_work;
             try
             {
-                auto discard = this->_pool.submit(&custom::file_indexer::process_dir, this, std::move(path));
+                if(path == "/")
+                {
+                    auto discard = this->_pool.submit(&custom::file_indexer::process_root, this, std::move(path));
+                }
+                else 
+                {
+                    auto discard = this->_pool.submit(&custom::file_indexer::process_dir, this, std::move(path));
+                }
             }
             catch(...)
             {
@@ -189,6 +196,96 @@ namespace custom
                     continue;
                 }
                 file_path = path + "/" + file_ptr->d_name;
+                struct stat file_data;
+                if(lstat(file_path.c_str(), &file_data) == -1)
+                {
+                    int err = errno;
+                    log_storage.add(file_path, err,failed_op::lstat);
+                    continue;
+                }
+                File_Record processed_file;
+                if(S_ISDIR(file_data.st_mode))
+                {
+                    processed_file.is_dir = true;
+                    ++outstanding_work;
+                    try
+                    {
+                        auto discard = _pool.submit(&file_indexer::process_dir,this,file_path);
+                    }
+                    catch(...)
+                    {
+                        --outstanding_work;
+                        log_storage.add(file_path, 0,failed_op::exception_thrown);
+                    }
+                }
+                else {
+                    processed_file.is_dir = false;
+                }
+                processed_file.path = std::move(file_path);
+                processed_file.size = static_cast<std::size_t>(file_data.st_size);
+                processed_file.mod_time = std::chrono::system_clock::time_point{std::chrono::seconds(file_data.st_mtim.tv_sec)};
+                file_batch.push_back(std::move(processed_file));
+                if(file_batch.size() >= 100)
+                {
+                    ++outstanding_work;
+                    try
+                    {
+                        auto discard = _pool.submit(&file_indexer::process_path,this,std::move(file_batch),path);
+                    }
+                    catch(...)
+                    {
+                        --outstanding_work;
+                        log_storage.add(path, 0,failed_op::exception_thrown);
+                    }
+                    file_batch = std::vector<File_Record>{};
+                    file_batch.reserve(101);
+                }
+            }
+            int err = errno;
+            if(!file_batch.empty())
+            {
+                ++outstanding_work;
+                try
+                {
+                auto discard = _pool.submit(&file_indexer::process_path,this,std::move(file_batch),path);
+                }
+                catch(...)
+                {
+                    --outstanding_work;
+                    log_storage.add(path, 0,failed_op::exception_thrown);
+                }
+            }
+            if(err != 0)
+            {
+                log_storage.add(path, err, failed_op::readdir);
+                return;
+            }
+        }
+        void process_root(std::string path)
+        {
+            std::unique_ptr<DIR, int(*)(DIR*)> dir = {opendir(path.c_str()), &closedir};
+            custom::outstanding_work_guard work_guard{this->outstanding_work};
+            if(dir == nullptr)
+            {
+                int err = errno;
+                log_storage.add(path, err, failed_op::opendir);
+                return;
+            }
+            std::vector<File_Record> file_batch;
+            file_batch.reserve(101);
+            dirent* file_ptr;
+            std::string file_path;
+            while(true)
+            {
+                errno = 0;
+                file_ptr = readdir(dir.get());
+                if(file_ptr == nullptr) break;
+                std::string_view temp (file_ptr->d_name);
+                if(temp == "." || temp == "..")
+                {
+                    continue;
+                }
+                file_path = path + file_ptr->d_name;
                 struct stat file_data;
                 if(lstat(file_path.c_str(), &file_data) == -1)
                 {
