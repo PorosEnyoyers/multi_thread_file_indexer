@@ -9,8 +9,11 @@ After the program finished scanning the files and directories in a given path, i
 ## Requirements:
 
 Linux
+
 Cmake 3.20 or newer
+
 A C++20 compiler (GCC 11+ or Clang 14+)
+
 
 ## Build instructions:
 
@@ -29,10 +32,15 @@ The binary is at `build/multi_thread_file_indexer`
 ```
 
 Enter an absolute path for the indexer to index all the files and directories underneath that path.
+
 All implemented command: 
+
 -size [Argument in Bytes] Example: -size 500
+
 -size -range [Lower Bound in Bytes] [Upper Bound in Bytes] Example: -size -range 500 100
+
 -path [Absolute Path relative to given directory] Example: /usr is given; -path /usr/lib
+
 -mod_time [today, this_week, this_month, this_year] Example: -mod_time today
 
 Starting program. Entering path pop up:
