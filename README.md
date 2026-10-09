@@ -28,8 +28,18 @@ The binary is at `build/multi_thread_file_indexer`
 ./build/multi_thread_file_indexer
 ```
 
+Enter an absolute path for the indexer to index all the files and directories underneath that path.
+All implemented command: 
+-size [Argument in Bytes] Example: -size 500
+-size -range [Lower Bound in Bytes] [Upper Bound in Bytes] Example: -size -range 500 100
+-path [Absolute Path relative to given directory] Example: /usr is given; -path /usr/lib
+-mod_time [today, this_week, this_month, this_year] Example: -mod_time today
 
-
+![starting program. Entering path pop up](images/1.png)
+![Search for size](images/2.png)
+![Search for range of size](images/3.png)
+![Search for path](images/4.png)
+![Search based on modified time](images/1.png)
 
 
 
