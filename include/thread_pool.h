@@ -105,7 +105,7 @@ namespace custom
         thread_pool()
         : m_done{false}
         {
-            unsigned  thread_count = std::thread::hardware_concurrency();
+            static unsigned  thread_count = std::thread::hardware_concurrency();
             if(thread_count == 0)
             {
                 thread_count = 1;
@@ -152,6 +152,17 @@ namespace custom
         {
             m_done = true;
             m_task_queue.notify_all();
+        }
+        friend std::ostream& operator<<(std::ostream& out,const thread_pool& pool)
+        {
+            out << "Numbers of threads in pool: " << pool.m_threads.size() <<".\n";
+            int num = 1;
+            for (auto& i :pool.m_threads)
+            {
+                out << "Thread "<< num << " id is " <<i.get_id() << '\n';
+                ++num;
+            }
+            return out;
         }
     private:
         std::atomic_bool m_done;

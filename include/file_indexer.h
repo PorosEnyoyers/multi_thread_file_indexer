@@ -157,6 +157,11 @@ namespace custom
             }
             return res;
         }
+        friend std::ostream& operator<<(std::ostream& out, const file_indexer& index)
+        {
+            out << index._pool;
+            return out;
+        }
         private:
         // void loading()
         // {

@@ -4,7 +4,8 @@ int main()
 {
     custom::file_indexer indexer{};
     std::string starting_dir;
-    std::cout <<"Enter the directory to index: ";
+    std::cout << "Thread pool created.\n" << indexer;
+    std::cout <<"\n\nEnter the directory to index: ";
     std::getline(std::cin, starting_dir);
     if(indexer.start(starting_dir) == -1)
     {
