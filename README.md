@@ -38,17 +38,14 @@ All implemented command:
 Starting program. Entering path pop up:
 ![starting program. Entering path pop up](images/1.png)
 
+Finished indexing with info and log printed:
+![Finished indexing with info and log printed](images/2.png)
+
 Search for size:
-![Search for size](images/2.png)
+![Search for size](images/3.png)
 
-Search for range of size:
-![Search for range of size](images/3.png)
-
-Search for path:
-![Search for path](images/4.png)
-
-Search based on modified time:
-![Search based on modified time](images/1.png)
+Search for range size:
+![Search for range size](images/4.png)
 
 
 
