@@ -35,10 +35,19 @@ All implemented command:
 -path [Absolute Path relative to given directory] Example: /usr is given; -path /usr/lib
 -mod_time [today, this_week, this_month, this_year] Example: -mod_time today
 
+Starting program. Entering path pop up:
 ![starting program. Entering path pop up](images/1.png)
+
+Search for size:
 ![Search for size](images/2.png)
+
+Search for range of size:
 ![Search for range of size](images/3.png)
+
+Search for path:
 ![Search for path](images/4.png)
+
+Search based on modified time:
 ![Search based on modified time](images/1.png)
 
 
