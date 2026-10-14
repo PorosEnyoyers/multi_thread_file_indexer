@@ -6,6 +6,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <concepts>
+#include <atomic>
 
 namespace custom
 {
@@ -57,11 +58,16 @@ namespace custom
         void push(T value) &
         {
             std::unique_ptr<Node> new_node = std::make_unique<Node>();
-            std::lock_guard<std::mutex> lk{m_tail_lk};
-            m_tail_ptr->initialized_value(std::move(value));
-            m_tail_ptr->set_next(std::move(new_node));
-            m_tail_ptr = m_tail_ptr->m_next.get();
-            ++m_size;
+            {            
+                std::lock_guard<std::mutex> lk{m_tail_lk};
+                m_tail_ptr->initialized_value(std::move(value));
+                m_tail_ptr->set_next(std::move(new_node));
+                m_tail_ptr = m_tail_ptr->m_next.get();
+                ++m_size;
+            }
+            {
+                std::lock_guard<std::mutex> temp_lk{m_head_lk};
+            }
             m_cv.notify_one();
         }
         bool try_pop(value_type& pipe_out) &
@@ -99,6 +105,9 @@ namespace custom
         }
         void notify_all() &
         {
+            {
+                std::lock_guard<std::mutex> temp_lk(m_head_lk);
+            }
             m_cv.notify_all();
         }
         size_type size() const
