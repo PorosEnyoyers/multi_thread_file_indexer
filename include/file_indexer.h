@@ -21,7 +21,7 @@ namespace custom
         file_indexer()
         : path_storage{}, size_storage{}, mod_storage{}, log_storage{}, outstanding_work{0}, _pool{}
         {
-            log_storage.logs.reserve(100);
+            log_storage.logs.reserve(250);
         }
         ~file_indexer() = default;
         int start(std::string path)
@@ -80,7 +80,7 @@ namespace custom
                 std::cout << "Tasks in queue: " << outstanding_work << "\n";
                 std::cout << "Files Indexed: " << num_file_processed << "\n";
 
-                std::this_thread::sleep_for(std::chrono::milliseconds{100});
+                std::this_thread::sleep_for(std::chrono::milliseconds{500});
             }
             _pool.shutdown();
                 std::cout << "Tasks in queue: " << outstanding_work << "\n";
@@ -187,7 +187,7 @@ namespace custom
                 return;
             }
             std::vector<File_Record> file_batch;
-            file_batch.reserve(101);
+            file_batch.reserve(251);
             dirent* file_ptr;
             std::string file_path;
             while(true)
@@ -230,7 +230,7 @@ namespace custom
                 processed_file.size = static_cast<std::size_t>(file_data.st_size);
                 processed_file.mod_time = std::chrono::system_clock::time_point{std::chrono::seconds(file_data.st_mtim.tv_sec)};
                 file_batch.push_back(std::move(processed_file));
-                if(file_batch.size() >= 100)
+                if(file_batch.size() >= 250)
                 {
                     ++outstanding_work;
                     try
@@ -243,7 +243,7 @@ namespace custom
                         log_storage.add(path, 0,failed_op::exception_thrown);
                     }
                     file_batch = std::vector<File_Record>{};
-                    file_batch.reserve(101);
+                    file_batch.reserve(251);
                 }
             }
             int err = errno;
@@ -277,7 +277,7 @@ namespace custom
                 return;
             }
             std::vector<File_Record> file_batch;
-            file_batch.reserve(101);
+            file_batch.reserve(251);
             dirent* file_ptr;
             std::string file_path;
             while(true)
@@ -320,7 +320,7 @@ namespace custom
                 processed_file.size = static_cast<std::size_t>(file_data.st_size);
                 processed_file.mod_time = std::chrono::system_clock::time_point{std::chrono::seconds(file_data.st_mtim.tv_sec)};
                 file_batch.push_back(std::move(processed_file));
-                if(file_batch.size() >= 100)
+                if(file_batch.size() >= 250)
                 {
                     ++outstanding_work;
                     try
@@ -333,7 +333,7 @@ namespace custom
                         log_storage.add(path, 0,failed_op::exception_thrown);
                     }
                     file_batch = std::vector<File_Record>{};
-                    file_batch.reserve(101);
+                    file_batch.reserve(251);
                 }
             }
             int err = errno;
@@ -360,7 +360,7 @@ namespace custom
         {
             custom::outstanding_work_guard work_guard{this->outstanding_work};
             std::vector<File_Record*> rec_ptrs;
-            rec_ptrs.reserve(100);
+            rec_ptrs.reserve(251);
             try
             {
                 std::lock_guard<std::mutex> lk{path_storage.lk};
