@@ -89,16 +89,12 @@ namespace custom
         }
         std::vector<File_Record*> find_path(const std::string& key)
         {
-            auto result = path_storage.storage[key].get();
-            if (result)
+            auto result = path_storage.storage.find(key);
+            if(result != path_storage.storage.end() && result->second)
             {
-                return std::vector<File_Record*>{result};
+                return {result->second.get()};
             }
-            else 
-            {
-                return {};
-            }
-
+            return{};
         }
         std::vector<File_Record*> find_size(const std::size_t& key)
         {
