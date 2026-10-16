@@ -28,3 +28,34 @@ target_link_libraries(multi_thread_file_indexer PRIVATE
 target_compile_options(multi_thread_file_indexer PRIVATE
     -Wall -Wextra
 )
+
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.18.0.zip
+)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+add_executable(indexer_tests tests/test_indexer.cpp)
+target_include_directories(indexer_tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/third_party/Custom_Container_Library/include
+)
+target_link_libraries(indexer_tests PRIVATE Threads::Threads GTest::gtest_main)
+
+# target_compile_options(indexer_tests PRIVATE -fsanitize=address,undefined -g -fno-omit-frame-pointer)
+# target_link_options(indexer_tests PRIVATE -fsanitize=address,undefined)
+
+include(GoogleTest)
+gtest_discover_tests(indexer_tests)
+
+# target_compile_options(multi_thread_file_indexer PRIVATE -fsanitize=address,undefined -g -fno-omit-frame-pointer)
+# target_link_options(multi_thread_file_indexer PRIVATE -fsanitize=address,undefined)
+
+set(SANITIZE "address,undefined" CACHE STRING "Value for -fsanitize=")
+foreach(tgt multi_thread_file_indexer indexer_tests)
+    target_compile_options(${tgt} PRIVATE -fsanitize=${SANITIZE} -g -fno-omit-frame-pointer)
+    target_link_options(${tgt} PRIVATE -fsanitize=${SANITIZE})
+endforeach()

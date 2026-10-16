@@ -55,7 +55,74 @@ Search for size:
 Search for range size:
 ![Search for range size](images/4.png)
 
+## Sanitizers
 
+The project is under 3 sanitizers:
 
+# Asan + UBsan 
+In CMakeList.txt:
 
+Add `#` before every line in: (If there's `#` before these lines ignore this)
+```
+set(SANITIZE "address,undefined" CACHE STRING "Value for -fsanitize=")
+foreach(tgt multi_thread_file_indexer indexer_tests)
+    target_compile_options(${tgt} PRIVATE -fsanitize=${SANITIZE} -g -fno-omit-frame-pointer)
+    target_link_options(${tgt} PRIVATE -fsanitize=${SANITIZE})
+endforeach()
+```
+Remove `#` before every line in: (If there's no `#` before these lines ignore this)
+```
+#target_compile_options(multi_thread_file_indexer PRIVATE -fsanitize=address,undefined -g -fno-omit-frame-pointer)
+#target_link_options(multi_thread_file_indexer PRIVATE -fsanitize=address,undefined)
 
+#target_compile_options(indexer_tests PRIVATE -fsanitize=address,undefined -g -fno-omit-frame-pointer)
+#target_link_options(indexer_tests PRIVATE -fsanitize=address,undefined)
+```
+
+Run this in console:
+```
+cmake -S . -B build && cmake --build build
+```
+
+# Result:
+Indexed 1.1 million files starting from '\' with no report errors or leaks.
+Correctness check every `/usr` files was index at 71600 files exactly matches `find /usr | wc -l` command in Linux
+
+# Tsan
+Warning:
+On WSL2, TSan may fail at startup with "unexpected memory mapping". Run
+`sudo sysctl vm.mmap_rnd_bits=28` and retry.
+
+In CMakeList.txt:
+
+Add `#` before everyline in: (If there are `#` before these lines ignore this)
+```
+target_compile_options(multi_thread_file_indexer PRIVATE -fsanitize=address,undefined -g -fno-omit-frame-pointer)
+target_link_options(multi_thread_file_indexer PRIVATE -fsanitize=address,undefined)
+
+target_compile_options(indexer_tests PRIVATE -fsanitize=address,undefined -g -fno-omit-frame-pointer)
+target_link_options(indexer_tests PRIVATE -fsanitize=address,undefined)
+```
+
+Remove `#` before everyline in: (If there's no `#` before these lines ignore this)
+```
+#set(SANITIZE "address,undefined" CACHE STRING "Value for -fsanitize=")
+#foreach(tgt multi_thread_file_indexer indexer_tests)
+    #target_compile_options(${tgt} PRIVATE -fsanitize=${SANITIZE} -g -fno-omit-frame-pointer)
+    #target_link_options(${tgt} PRIVATE -fsanitize=${SANITIZE})
+#endforeach()
+```
+
+Run this in console:
+```
+cmake -S . -B build-tsan -DSANITIZE=thread
+cmake --build build-tsan
+```
+
+Warning:
+On WSL2, TSan may fail at startup with "unexpected memory mapping". Run
+`sudo sysctl vm.mmap_rnd_bits=28` and retry.
+
+# Result:
+Indexed 1.1 million files starting from '\' with no report of data race or deadlock from threads.
+Correctness check every `/usr` files was index at 71600 files exactly matches `find /usr | wc -l` command in Linux

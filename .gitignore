@@ -1,5 +1,10 @@
 # Build output (CMake)
-build/
+build*/
+
+# Sanitizer logs
+asan.log*
+tsan.log*
+ubsan.log*
 
 # clangd index cache
 .cache/
