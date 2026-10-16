@@ -86,6 +86,7 @@ cmake -S . -B build && cmake --build build
 
 # Result:
 Indexed 1.1 million files starting from '\' with no report errors or leaks.
+
 Correctness check every `/usr` files was index at 71600 files exactly matches `find /usr | wc -l` command in Linux
 
 # Tsan
@@ -125,4 +126,5 @@ On WSL2, TSan may fail at startup with "unexpected memory mapping". Run
 
 # Result:
 Indexed 1.1 million files starting from '\' with no report of data race or deadlock from threads.
+
 Correctness check every `/usr` files was index at 71600 files exactly matches `find /usr | wc -l` command in Linux
